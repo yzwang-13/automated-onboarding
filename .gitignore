@@ -1,5 +1,6 @@
 # Client list file
 onboarding_clients_list.xlsx
+ibm-credentials.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
