@@ -11,3 +11,14 @@
    ```sh
     python3 csv-client.py
    ```
+
+3. Dockerize this project
+   ```sh
+    docker build -t automated-onboarding .
+   ```
+   run in interactive mode
+
+   ```sh
+    docker run -it automated-onboarding
+   ```
+   

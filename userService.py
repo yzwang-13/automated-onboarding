@@ -9,6 +9,7 @@ class User:
             self.userManager.set_service_url(ibm_service_url)
     
         self.account_id = account_id
+        self.status={}
 
         self.ROLE_ID = {'Viewer': 'crn:v1:bluemix:public:iam::::role:Viewer',
         'Administrator': 'crn:v1:bluemix:public:iam::::role:Administrator',
@@ -17,6 +18,7 @@ class User:
 
     def invite_users_to_cloud(self,users_df, access_group_id):
         users2add_df = users_df[users_df['action'] == 'add']
+        print(users2add_df)
         
         # ==================================
         # WARNING: This doen't work, getting error 500
@@ -27,8 +29,10 @@ class User:
         responses = [self.invite_one_user(email, role, access_group_id)
                         for email, role in zip(users2add_df['email'], users2add_df['role'])]
         [print(r) for r in responses]
+        print(self.status)
+        return self.status
 
-    def invite_one_user(self, email, role, access_group_id):
+    def invite_one_user(self, email, role,access_group_id):
         invite_user_model = {
         'email': email,
         'account_role': role
@@ -53,6 +57,9 @@ class User:
             iam_policy=[invite_user_iam_policy_model],
             access_groups=[access_group_id]
         ).get_result()
+
+        print(invite_user_response)
+        self.status[email] = invite_user_response["resources"][0]["state"]
 
         return json.dumps(invite_user_response, indent=2)
 
@@ -85,8 +92,15 @@ class User:
         ).get_result()
 
         print(json.dumps(invite_user_response, indent=2))
+
+    def get_users(self):
+        user_list = self.userManager.list_users(account_id=self.account_id).get_result()
+        return user_list
+    def get_user(self, user_iam_id):
+        user_profile = self.userManager.get_user_profile(account_id=self.account_id, iam_id=user_iam_id).get_result()
+        print(json.dumps(user_profile, indent=2))
     
-    def removeUser(self, user_id):
+    def remove_user(self, user_id):
         response = self.userManager.remove_user(account_id=self.account_id,iam_id=user_id).get_result()
         return response
 
