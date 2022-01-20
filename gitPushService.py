@@ -5,9 +5,9 @@ import json
 from datetime import datetime
 
 class GitPush:
-	def push(self, commit_message: str = None):
+	def push(self, login_or_token: str, commit_message: str = None):
 		commit_message = "test commit from python"
-		g = Github(base_url="https://github.ibm.com/api/v3", login_or_token="eba08238b0ab3f8d734f36f5321adb54c3e8d406")
+		g = Github(base_url="https://github.ibm.com/api/v3", login_or_token=login_or_token)
 		repo = g.get_user().get_repo('holiday-project')
 		# A Git reference (git ref) is just a file that contains a Git commit SHA-1 hash. When referring to a Git commit, you can use the Git reference, which is an easy-to-remember name, rather than the hash. 
 		master_ref = repo.get_git_ref('heads/master')
