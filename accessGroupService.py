@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 from ibm_platform_services import IamAccessGroupsV2
 
 class AccessGroup:
@@ -31,9 +32,13 @@ class AccessGroup:
         return group
 
     # delete a access group based on access group id
-    def delete_a_access_group(self, access_group_id: str):
+    def delete_a_access_group(self, access_group_id: str, force: Boolean = False):
         response = self.iamAccessGroupV2.delete_access_group(
-        access_group_id
+        access_group_id,
+        force=force
         )
         return response
 
+    def get_members(self, access_group_id: str):
+        group_members_list = self.iamAccessGroupV2.list_access_group_members(access_group_id=access_group_id).get_result()
+        return group_members_list
