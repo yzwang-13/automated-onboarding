@@ -1,6 +1,10 @@
+from ast import ExceptHandler
 from fileinput import filename
+import sys
 import requests
 import pandas as pd
+
+from ExceptionResolver import ExceptionResolver
 
 class Csv:
 
@@ -14,7 +18,7 @@ class Csv:
     # make request to github enterprise repo to fetch client onboarding list
     # and put them into an excel sheet before load into dataframe
     # currently only deal with sheet1 in excel
-    def getClientExcel(self, sheetName):
+    def getExcel(self, sheetName):
         headers = {
             'Authorization': 'token {token}'.format(token = self.PAO),
             'Accept': self.requestType
@@ -26,10 +30,10 @@ class Csv:
         newFile.write(response.content)
 
         # read client list data into pandas
+
+        # data_xls = pd.read_excel(self.fileName, dtype=str, index_col=None, engine='openpyxl')
         data_xls = pd.read_excel(self.fileName, sheetName, dtype=str, index_col=None, engine='openpyxl')
-        # print (data_xls.head())
         self.data_xls = data_xls
-        print(data_xls)
         return data_xls
 
     def updateStatusLocalExcel(self, index):
@@ -38,10 +42,19 @@ class Csv:
             # self.data_xls.at[key, 'status'] = value
             self.data_xls.loc[self.data_xls.email == key, 'status'] = value
         print(self.data_xls)
+    
+    def createExceptionLocalExcel(self, message, sheetName, columnName):
+        print(columnName)
+        print(sheetName)
+        print(message)
+        exception_frame = pd.DataFrame({columnName: {0: message}})
+        self.writeDataframeToExcel(data_frame=exception_frame, sheetName=sheetName)
 
-    def writeDataframeToExcel(self, sheetName):
+
+    def writeDataframeToExcel(self, data_frame, sheetName):
         with pd.ExcelWriter(self.fileName, mode='a',if_sheet_exists="replace") as writer:
-            self.data_xls.to_excel(writer, sheet_name=sheetName, index=False), 
+            print("writing....")
+            data_frame.to_excel(writer, sheet_name=sheetName, index=False)
 
 
 

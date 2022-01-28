@@ -42,3 +42,10 @@ class AccessGroup:
     def get_members(self, access_group_id: str):
         group_members_list = self.iamAccessGroupV2.list_access_group_members(access_group_id=access_group_id).get_result()
         return group_members_list
+
+    def delete_member(self, access_group_id: str, iam_id: str):
+        response = self.iamAccessGroupV2.remove_member_from_access_group(
+        access_group_id = access_group_id,
+        iam_id= iam_id
+        )
+        return response

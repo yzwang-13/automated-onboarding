@@ -10,7 +10,7 @@ class GitPush:
 		g = Github(base_url="https://github.ibm.com/api/v3", login_or_token=login_or_token)
 		repo = g.get_user().get_repo('holiday-project')
 		# A Git reference (git ref) is just a file that contains a Git commit SHA-1 hash. When referring to a Git commit, you can use the Git reference, which is an easy-to-remember name, rather than the hash. 
-		master_ref = repo.get_git_ref('heads/master')
+		master_ref = repo.get_git_ref('heads/dev')
 		master_sha = master_ref.object.sha
 		base_tree = repo.get_git_tree(master_sha)
 		element_list = list()
