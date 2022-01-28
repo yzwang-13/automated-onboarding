@@ -18,7 +18,7 @@ The steps are quite easy and straight forward:
 
 3. You will need to create a environment file called .env
 
-![Sample .env setup](./environmentVariable.png?raw=true ".env")
+![Sample .env setup](./pictures/environmentVariable.png ".env")
 
 
 ## Run
